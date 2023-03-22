@@ -40,6 +40,7 @@ export default class GuardBehavior extends NPCBehavior {
         // Set the guards goal
         this.goal = GuardStatuses.GOAL;
 
+        console.log("THIS.GUARD: " , this.owner)
         // Initialize the guard behavior
         this.initialize();
     }

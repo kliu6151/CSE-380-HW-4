@@ -6,6 +6,7 @@ import NPCActor from "../../../Actors/NPCActor";
 import NPCBehavior from "../NPCBehavior";
 import NPCAction from "./NPCAction";
 import Finder from "../../../GameSystems/Searching/Finder";
+import { ItemEvent } from "../../../Events";
 
 
 export default class UseHealthpack extends NPCAction {
@@ -22,7 +23,16 @@ export default class UseHealthpack extends NPCAction {
     }
 
     public performAction(target: Battler): void {
+        const healthpack = this.actor.inventory.find(item => item instanceof Healthpack) as Healthpack;
 
+        if (healthpack) {
+            // Heal the target
+            target.health += healthpack.health;
+            // this.emitter.fireEvent(ItemEvent.CONSUMABLE_USED, {node: this.actor, item: healthpack})
+            this.actor.inventory.remove(healthpack.id);
+            this.finished();
+        }
+        
     }
 
 }

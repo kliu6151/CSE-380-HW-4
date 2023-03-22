@@ -5,6 +5,7 @@ import NPCAction from "./NPCAction";
 import Item from "../../../GameSystems/ItemSystem/Item";
 import Finder from "../../../GameSystems/Searching/Finder";
 import { TargetableEntity } from "../../../GameSystems/Targeting/TargetableEntity";
+import { ItemEvent } from "../../../Events";
 
 export default class PickupTargetedItem extends NPCAction {
 
@@ -22,6 +23,7 @@ export default class PickupTargetedItem extends NPCAction {
     public performAction(target: Item): void {
         if (target.inventory === null) {
             this.actor.inventory.add(target)
+            this.emitter.fireEvent(ItemEvent.ITEM_REQUEST, {node: this.actor, inventory: this.actor.inventory})
         }
         this.finished();
     }

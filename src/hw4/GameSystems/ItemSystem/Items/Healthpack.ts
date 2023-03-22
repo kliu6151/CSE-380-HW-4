@@ -6,6 +6,7 @@ import Item from "../Item";
 export default class Healthpack extends Item {
     
     protected hp: number;
+    protected available: boolean;
 
     public constructor(sprite: Sprite) {
         super(sprite);
@@ -14,6 +15,6 @@ export default class Healthpack extends Item {
 
     public get health(): number { return this.hp; }
     public set health(hp: number) { this.hp = hp; }
-
+    public setAvailable(available: boolean): void { this.available = available; }
 
 }

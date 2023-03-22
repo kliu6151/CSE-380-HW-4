@@ -45,7 +45,7 @@ export default abstract class PlayerState extends State {
 
         // Handle the player trying to drop an item
         if (this.parent.controller.dropping) {
-            
+            // this.emitter.fireEvent(ItemEvent.DROP_ITEM, {node: this.owner, inventory: this.owner.inventory});
         }
 
         if (this.parent.controller.useItem) {

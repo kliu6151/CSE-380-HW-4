@@ -9,7 +9,7 @@ export enum BattlerEvent {
 
 export enum ItemEvent {
     ITEM_REQUEST = "ITEM_REQUEST",
-
+    DROP_ITEM = "DROP_ITEM",
     LASERGUN_FIRED = "LASERGUN_FIRED",
 
     WEAPON_USED = "WEAPON_USED",

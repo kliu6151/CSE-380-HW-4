@@ -17,6 +17,7 @@ import Color from "../../Wolfie2D/Utils/Color";
 import MathUtils from "../../Wolfie2D/Utils/MathUtils";
 import NPCActor from "../Actors/NPCActor";
 import PlayerActor from "../Actors/PlayerActor";
+import UseHealthpack from "../AI/NPC/NPCActions/UseHealthpack";
 import GuardBehavior from "../AI/NPC/NPCBehavior/GaurdBehavior";
 import HealerBehavior from "../AI/NPC/NPCBehavior/HealerBehavior";
 import PlayerAI from "../AI/Player/PlayerAI";
@@ -86,7 +87,7 @@ export default class MainHW4Scene extends HW4Scene {
         this.load.spritesheet("RedHealer", "hw4_assets/spritesheets/RedHealer.json");
 
         // Load the tilemap
-        this.load.tilemap("level", "hw4_assets/tilemaps/HW4Tilemap.json");
+        this.load.tilemap("level", "hw4_assets/tilemaps/HW4CustomTilemap.json");
 
         // Load the enemy locations
         this.load.object("red", "hw4_assets/data/enemies/red.json");
@@ -132,6 +133,7 @@ export default class MainHW4Scene extends HW4Scene {
         this.receiver.subscribe("healthpack");
         this.receiver.subscribe("enemyDied");
         this.receiver.subscribe(ItemEvent.ITEM_REQUEST);
+        this.receiver.subscribe(ItemEvent.CONSUMABLE_USED);
 
         // Add a UI for health
         this.addUILayer("health");
@@ -166,8 +168,14 @@ export default class MainHW4Scene extends HW4Scene {
                 break;
             }
             case ItemEvent.ITEM_REQUEST: {
+                console.log("ITEM REQ")
                 this.handleItemRequest(event.data.get("node"), event.data.get("inventory"));
                 break;
+            }
+            case ItemEvent.CONSUMABLE_USED: {
+                console.log("Consumable used");
+                console.log(event.data)
+                this.handleItemUse(event.data.get("item"));
             }
             default: {
                 throw new Error(`Unhandled event type "${event.type}" caught in HW4Scene event handler`);
@@ -175,9 +183,14 @@ export default class MainHW4Scene extends HW4Scene {
         }
     }
 
+    protected handleItemUse(item: Item): void {
+        if (item instanceof Healthpack) {
+            item.setAvailable(false);
+        }
+    }
     protected handleItemRequest(node: GameNode, inventory: Inventory): void {
         let items: Item[] = new Array<Item>(...this.healthpacks, ...this.laserguns).filter((item: Item) => {
-            return item.inventory === null && item.position.distanceTo(node.position) <= 100;
+            return item.inventory === null && item.position.distanceTo(node.position) <= 10;
         });
 
         if (items.length > 0) {
@@ -431,7 +444,7 @@ export default class MainHW4Scene extends HW4Scene {
         navmesh.registerStrategy("astar", new AstarStrategy(navmesh));
 
         // TODO set the strategy to use A* pathfinding
-        navmesh.setStrategy("direct");
+        navmesh.setStrategy("astar");
 
         // Add this navmesh to the navigation manager
         this.navManager.addNavigableEntity("navmesh", navmesh);

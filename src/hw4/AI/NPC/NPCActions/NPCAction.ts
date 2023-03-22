@@ -7,6 +7,7 @@ import Finder from "../../../GameSystems/Searching/Finder";
 import { TargetableEntity } from "../../../GameSystems/Targeting/TargetableEntity";
 import BasicFinder from "../../../GameSystems/Searching/BasicFinder";
 import NavigationPath from "../../../../Wolfie2D/Pathfinding/NavigationPath";
+import Item from "../../../GameSystems/ItemSystem/Item";
 
 /**
  * An abstract GoapAction for an NPC. All NPC actions consist of doing three things:
@@ -42,9 +43,13 @@ export default abstract class NPCAction extends GoapAction {
     }
 
     public onEnter(options: Record<string, any>): void {
+        this.findAndUpdateTarget();
+
+    }
+    protected findAndUpdateTarget(): void {
         // Select the target location where the NPC should perform the action
         this.target = this.targetFinder.find(this.targets);
-
+    
         // If we found a target, set the NPCs target to the target and find a path to the target
         if (this.target !== null) {
             // Set the actors current target to be the target for this action
@@ -53,10 +58,40 @@ export default abstract class NPCAction extends GoapAction {
             this.path = this.actor.getPath(this.actor.position, this.target.position);
         }
     }
+    
+    protected isTargetAvailable(target: TargetableEntity): boolean {
+        // In this case, we are specifically checking for an Item target
+        if (target instanceof Item) {
+            return target.inventory === null;
+        }
+    
+        // For other target types, you can add more conditions here
+        // For now, we return true as a default behavior
+        return true;
+    }
+    
 
     public update(deltaT: number): void {
-        // TODO get the NPCs to move on their paths
+        // If there's a valid path and the target is still available, proceed
+        if (this.path !== null && this.target !== null && this.isTargetAvailable(this.target)) {
+            // Move the NPC along the path
+            const speed = this.actor.speed * deltaT * 5;
+    
+            if (!this.path.isDone()) {
+                this.actor.moveOnPath(speed, this.path);
+            }
+    
+            // Check if the NPC has reached the target
+            if (this.path.isDone()) {
+                // Perform the action at the target location
+                this.performAction(this.target);
+            }
+        } else {
+            // If the target is no longer available or path is null, find a new target
+            this.findAndUpdateTarget();
+        }
     }
+    
 
     public abstract performAction(target: TargetableEntity): void;
 
