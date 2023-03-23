@@ -75,7 +75,7 @@ export default abstract class NPCAction extends GoapAction {
         // If there's a valid path and the target is still available, proceed
         if (this.path !== null && this.target !== null && this.isTargetAvailable(this.target)) {
             // Move the NPC along the path
-            const speed = this.actor.speed * deltaT * 5;
+            const speed = this.actor.speed * deltaT * 2.5;
     
             if (!this.path.isDone()) {
                 this.actor.moveOnPath(speed, this.path);
