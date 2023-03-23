@@ -85,6 +85,8 @@ export default abstract class NPCAction extends GoapAction {
             if (this.path.isDone()) {
                 // Perform the action at the target location
                 this.performAction(this.target);
+                this.target = null;
+                this.path = null;
             }
         } else {
             // If the target is no longer available or path is null, find a new target

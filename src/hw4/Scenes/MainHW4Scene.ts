@@ -168,12 +168,12 @@ export default class MainHW4Scene extends HW4Scene {
                 break;
             }
             case ItemEvent.ITEM_REQUEST: {
-                console.log("ITEM REQ")
+                // console.log("ITEM REQ")
                 this.handleItemRequest(event.data.get("node"), event.data.get("inventory"));
                 break;
             }
             case ItemEvent.CONSUMABLE_USED: {
-                console.log("Consumable used");
+                // console.log("Consumable used");
                 console.log(event.data)
                 this.handleItemUse(event.data.get("item"));
             }

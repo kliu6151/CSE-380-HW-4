@@ -49,7 +49,11 @@ export default abstract class PlayerState extends State {
         }
 
         if (this.parent.controller.useItem) {
-
+            // console.log("PLAYER OWNER:" , this.owner)
+            // let item: Item = this.owner.inventory.useSelectedItem();
+            // if (item) {
+            //     this.emitter.fireEvent(ItemEvent.CONSUMABLE_USED, { item: item });
+            // }
         }
     }
 

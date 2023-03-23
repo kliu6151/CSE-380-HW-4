@@ -93,7 +93,8 @@ export default class HealerBehavior extends NPCBehavior {
     pickupHealthpack.targets = scene.getHealthpacks();
     pickupHealthpack.targetFinder = new BasicFinder<Item>(
       ClosestPositioned(this.owner),
-      ItemFilter(Healthpack)
+      ItemFilter(Healthpack),
+        VisibleItemFilter()
     );
     pickupHealthpack.addPrecondition(HealerStatuses.HPACK_EXISTS);
     pickupHealthpack.addEffect(HealerStatuses.HAS_HPACK);
