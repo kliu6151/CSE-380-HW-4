@@ -120,7 +120,6 @@ export default class HealerBehavior extends NPCBehavior {
     let idle = new Idle(this, this.owner);
     idle.targets = [this.owner];
     idle.targetFinder = new BasicFinder();
-    idle.addPrecondition(HealerStatuses.HAS_HPACK);
     idle.addEffect(HealerStatuses.GOAL);
     idle.cost = 1000;
     this.addState(HealerActions.IDLE, idle);
